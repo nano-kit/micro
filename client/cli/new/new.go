@@ -22,15 +22,11 @@ import (
 
 func protoComments(goDir, alias string) []string {
 	return []string{
-		"\ndownload protoc zip packages (protoc-$VERSION-$PLATFORM.zip) and install:\n",
-		"visit https://github.com/protocolbuffers/protobuf/releases",
-		"\ndownload protobuf for micro:\n",
-		"go get -u github.com/golang/protobuf/proto",
-		"go get -u github.com/golang/protobuf/protoc-gen-go",
-		"go get github.com/micro/micro/v2/cmd/protoc-gen-micro",
 		"\ncompile the proto file " + alias + ".proto:\n",
-		"cd " + goDir,
-		"make proto\n",
+		"\tcd " + goDir,
+		"\tmake proto",
+		"\nbuild the project:\n",
+		"\tmake build\n",
 	}
 }
 
