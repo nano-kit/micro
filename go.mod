@@ -34,4 +34,5 @@ require (
 	google.golang.org/grpc v1.26.0
 )
 
-replace github.com/micro/go-micro/v2 => ../go-micro
+// Use a production ready go-micro/v2 stable version maintained by nano-kit.
+replace github.com/micro/go-micro/v2 => github.com/nano-kit/go-micro/v2 v2.10.0
