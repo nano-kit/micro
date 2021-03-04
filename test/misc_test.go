@@ -27,6 +27,8 @@ func testNew(t *t) {
 		return
 	}
 
+	t.t.Skip("tools should be installed manually")
+
 	lines := strings.Split(string(outp), "\n")
 	// executing install instructions
 	for _, line := range lines {
