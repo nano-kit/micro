@@ -269,6 +269,7 @@ func testLocalEnvRunGithubSource(t *t) {
 }
 
 func TestRunGithubSource(t *testing.T) {
+	t.Skip("micro run is not supported yet")
 	trySuite(t, testRunGithubSource, retryCount)
 }
 
@@ -408,6 +409,7 @@ func testRunLocalUpdateAndCall(t *t) {
 }
 
 func TestExistingLogs(t *testing.T) {
+	t.Skip("micro run is not supported yet")
 	trySuite(t, testExistingLogs, retryCount)
 }
 
@@ -439,6 +441,7 @@ func testExistingLogs(t *t) {
 }
 
 func TestStreamLogsAndThirdPartyRepo(t *testing.T) {
+	t.Skip("micro run is not supported yet")
 	trySuite(t, testStreamLogsAndThirdPartyRepo, retryCount)
 }
 

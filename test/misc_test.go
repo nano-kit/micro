@@ -22,8 +22,8 @@ func testNew(t *t) {
 		t.Fatal(err)
 		return
 	}
-	if !strings.Contains(string(outp), "protoc") {
-		t.Fatalf("micro new lacks 	protobuf install instructions %v", string(outp))
+	if !strings.Contains(string(outp), "make build") {
+		t.Fatalf("micro new lacks build instructions %v", string(outp))
 		return
 	}
 
