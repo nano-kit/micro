@@ -14,18 +14,24 @@ import (
 )
 
 // New returns a wrapped grpc client which will inject the
-// token found in config into each request
-func New(ctx *ccli.Context) client.Client {
+// token and namespace found in config into each request
+func New(ctx *ccli.Context, opts ...Option) client.Client {
 	env := cliutil.GetEnv(ctx)
 	token, _ := config.Get("micro", "auth", env.Name, "token")
-	return &wrapper{grpc.NewClient(), token, env.Name, ctx}
+	ns, _ := config.Get("micro", "auth", env.Name, "namespace")
+	a := &wrapper{grpc.NewClient(), ns, token, env.Name, ctx}
+	for _, o := range opts {
+		o(a)
+	}
+	return a
 }
 
 type wrapper struct {
 	client.Client
-	token string
-	env   string
-	ctx   *ccli.Context
+	namespace string
+	token     string
+	env       string
+	ctx       *ccli.Context
 }
 
 func (a *wrapper) Call(ctx context.Context, req client.Request, rsp interface{}, opts ...client.CallOption) error {
@@ -43,5 +49,16 @@ func (a *wrapper) Call(ctx context.Context, req client.Request, rsp interface{},
 		// env := strings.ReplaceAll(a.env, "/", "-")
 		// ctx = metadata.Set(ctx, "Micro-Namespace", env)
 	}
+	if len(a.namespace) > 0 {
+		ctx = metadata.Set(ctx, "Micro-Namespace", a.namespace)
+	}
 	return a.Client.Call(ctx, req, rsp, opts...)
+}
+
+type Option func(*wrapper)
+
+func WithNamespace(ns string) Option {
+	return func(a *wrapper) {
+		a.namespace = ns
+	}
 }

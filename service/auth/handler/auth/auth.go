@@ -110,7 +110,7 @@ func (a *Auth) setupDefaultAccount(ns string) error {
 			Scopes: defaultAccount.Scopes,
 			Secret: defaultAccount.Secret,
 		}
-		logger.Info("Generating default account")
+		logger.Infof("Generating default account in namespace %q", ns)
 		err = a.Generate(ctx, req, &pb.GenerateResponse{})
 		if err != nil {
 			return err
@@ -182,6 +182,9 @@ func (a *Auth) Generate(ctx context.Context, req *pb.GenerateRequest, rsp *pb.Ge
 	}
 
 	// return the account
+	if logger.V(logger.DebugLevel, logger.DefaultLogger) {
+		logger.Debugf("generate account: key=%v, account=%+v", key, acc)
+	}
 	rsp.Account = serializeAccount(acc)
 	rsp.Account.Secret = req.Secret // return unhashed secret
 	return nil

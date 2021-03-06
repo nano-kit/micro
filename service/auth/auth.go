@@ -132,6 +132,9 @@ func Run(ctx *cli.Context, srvOpts ...micro.Option) {
 	pb.RegisterRulesHandler(service.Server(), ruleH)
 	pb.RegisterAccountsHandler(service.Server(), authH)
 
+	// output setup infos
+	log.Infof("tokenProvider=%v, store=%v", authH.TokenProvider, authH.Options.Store)
+
 	// run service
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
@@ -139,9 +142,6 @@ func Run(ctx *cli.Context, srvOpts ...micro.Option) {
 }
 
 func authFromContext(ctx *cli.Context) auth.Auth {
-	if cliutil.IsLocal(ctx) {
-		return *cmd.DefaultCmd.Options().Auth
-	}
 	return srvAuth.NewAuth(
 		auth.WithClient(client.New(ctx)),
 	)
@@ -172,9 +172,15 @@ func login(ctx *cli.Context) {
 	}
 	id := ctx.Args().Get(0)
 	secret := ctx.Args().Get(1)
+	a := authFromContext(ctx)
+
+	// Switch to the namespace explicitly
+	if ns := ctx.String("namespace"); len(ns) > 0 {
+		a = srvAuth.NewAuth(auth.WithClient(client.New(ctx, client.WithNamespace(ns))))
+	}
 
 	// Execute the request
-	tok, err := authFromContext(ctx).Token(auth.WithCredentials(id, secret), auth.WithExpiry(time.Hour*24))
+	tok, err := a.Token(auth.WithCredentials(id, secret), auth.WithExpiry(time.Hour*24))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -189,6 +195,14 @@ func login(ctx *cli.Context) {
 	if err := config.Set(tok.RefreshToken, "micro", "auth", env.Name, "refresh-token"); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+
+	// Store the namespace where the accounts and rules belong, refer to internal/client/client.go
+	if ns := ctx.String("namespace"); len(ns) > 0 {
+		if err := config.Set(ns, "micro", "auth", env.Name, "namespace"); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	}
 
 	// Inform the user
@@ -316,6 +330,10 @@ func Commands(srvOpts ...micro.Option) []*cli.Command {
 				&cli.StringFlag{
 					Name:  "token",
 					Usage: "The token to set",
+				},
+				&cli.StringFlag{
+					Name:  "namespace",
+					Usage: "switch to namespace where the accounts and rules belong",
 				},
 			},
 		},

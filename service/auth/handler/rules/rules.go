@@ -9,6 +9,7 @@ import (
 	"github.com/micro/go-micro/v2/auth"
 	pb "github.com/micro/go-micro/v2/auth/service/proto"
 	"github.com/micro/go-micro/v2/errors"
+	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/store"
 	memStore "github.com/micro/go-micro/v2/store/memory"
 	"github.com/micro/micro/v2/internal/namespace"
@@ -93,6 +94,7 @@ func (r *Rules) setupDefaultRules(ns string) {
 			},
 		}
 
+		logger.Infof("Generating default rule in namespace %q", ns)
 		r.Create(ctx, req, &pb.CreateResponse{})
 	}
 
