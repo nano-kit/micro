@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -212,8 +213,8 @@ func login(ctx *cli.Context) {
 // whoami returns info about the logged in user
 func whoami(ctx *cli.Context) {
 	// Get the token from micro config
-	env, _ := config.Get("env")
-	tok, err := config.Get("micro", "auth", env, "token")
+	env := cliutil.GetEnv(ctx)
+	tok, err := config.Get("micro", "auth", env.Name, "token")
 	if err != nil {
 		fmt.Println("You are not logged in")
 		os.Exit(1)
@@ -230,6 +231,26 @@ func whoami(ctx *cli.Context) {
 	}
 
 	fmt.Printf("ID: %v; Scopes: %v\n", acc.ID, strings.Join(acc.Scopes, ", "))
+}
+
+// getToken from account
+func getToken(ctx *cli.Context) {
+	var options []auth.TokenOption
+	if len(ctx.String("refresh_token")) > 0 {
+		options = append(options, auth.WithToken(ctx.String("refresh_token")))
+	} else {
+		options = append(options, auth.WithCredentials(ctx.Args().Get(0), ctx.String("secret")))
+	}
+	options = append(options, auth.WithExpiry(time.Hour))
+
+	tok, err := authFromContext(ctx).Token(options...)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	} else {
+		out, _ := json.MarshalIndent(tok, "", "  ")
+		fmt.Println(string(out))
+	}
 }
 
 //Commands for auth
@@ -333,7 +354,7 @@ func Commands(srvOpts ...micro.Option) []*cli.Command {
 				},
 				&cli.StringFlag{
 					Name:  "namespace",
-					Usage: "switch to namespace where the accounts and rules belong",
+					Usage: "Switch to namespace where the accounts and rules belong",
 				},
 			},
 		},
@@ -343,6 +364,24 @@ func Commands(srvOpts ...micro.Option) []*cli.Command {
 			Action: func(ctx *cli.Context) error {
 				whoami(ctx)
 				return nil
+			},
+		},
+		{
+			Name:  "token",
+			Usage: "Get token for account",
+			Action: func(ctx *cli.Context) error {
+				getToken(ctx)
+				return nil
+			},
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:  "refresh_token",
+					Usage: "The account refresh token",
+				},
+				&cli.StringFlag{
+					Name:  "secret",
+					Usage: "The account secret (password)",
+				},
 			},
 		},
 	}
