@@ -55,10 +55,13 @@ func (a *wrapper) Call(ctx context.Context, req client.Request, rsp interface{},
 	return a.Client.Call(ctx, req, rsp, opts...)
 }
 
+// Option is the New options
 type Option func(*wrapper)
 
-func WithNamespace(ns string) Option {
+// SwitchNamespaceAndResetToken change namespace and reset token
+func SwitchNamespaceAndResetToken(ns string) Option {
 	return func(a *wrapper) {
 		a.namespace = ns
+		a.token = ""
 	}
 }

@@ -176,7 +176,7 @@ func login(ctx *cli.Context) {
 
 	// Switch to the namespace explicitly
 	if ns := ctx.String("namespace"); len(ns) > 0 {
-		a = srvAuth.NewAuth(auth.WithClient(client.New(ctx, client.WithNamespace(ns))))
+		a = srvAuth.NewAuth(auth.WithClient(client.New(ctx, client.SwitchNamespaceAndResetToken(ns))))
 	}
 
 	// Execute the request

@@ -65,12 +65,12 @@ func (a authWrapper) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// account doesn't necesserially mean a forbidden request
 	acc, err := a.auth.Inspect(token)
 	if logger.V(logger.DebugLevel, logger.DefaultLogger) {
-		logger.Debugf("inspect: auth=[%v], token=%q, account=%+v, err=%v", a.auth, token, acc, err)
+		logger.Debugf("inspect: auth=[%v], namespace=%s, token=%q, account=%+v, err=%v", a.auth, ns, token, acc, err)
 	}
 
 	// Ensure the accounts issuer matches the namespace being requested
 	if acc != nil && len(acc.Issuer) > 0 && acc.Issuer != ns {
-		http.Error(w, "Account not issued by "+ns, 403)
+		http.Error(w, "Account was not issued by "+ns, 403)
 		return
 	}
 
@@ -123,7 +123,7 @@ func (a authWrapper) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// If there is no auth login url set, 401
 	loginURL := a.auth.Options().LoginURL
 	if loginURL == "" {
-		http.Error(w, "unauthorized request", 401)
+		http.Error(w, "Unauthorized request", 401)
 		return
 	}
 
