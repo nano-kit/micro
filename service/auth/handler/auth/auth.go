@@ -139,8 +139,14 @@ func (a *Auth) Generate(ctx context.Context, req *pb.GenerateRequest, rsp *pb.Ge
 
 	// check the user does not already exists
 	key := strings.Join([]string{storePrefixAccounts, namespace.FromContext(ctx), req.Id}, joinKey)
-	if _, err := a.Options.Store.Read(key); err != store.ErrNotFound {
-		return errors.BadRequest("go.micro.auth", "Account with this ID already exists")
+	if _, err := a.Options.Store.Read(key); err != nil {
+		if err != store.ErrNotFound {
+			return errors.InternalServerError("go.micro.auth", "Store broken: %v", err)
+		}
+	} else { // when the user already exists
+		if req.Provider != "oauth" {
+			return errors.BadRequest("go.micro.auth", "Account with this ID already exists")
+		}
 	}
 
 	// hash the secret
@@ -177,8 +183,10 @@ func (a *Auth) Generate(ctx context.Context, req *pb.GenerateRequest, rsp *pb.Ge
 	}
 
 	// set a refresh token
-	if err := a.setRefreshToken(ctx, acc.ID, uuid.New().String()); err != nil {
-		return errors.InternalServerError("go.micro.auth", "Unable to set a refresh token: %v", err)
+	if _, err := a.refreshTokenForAccount(ctx, acc.ID); err == store.ErrNotFound {
+		if err := a.setRefreshToken(ctx, acc.ID, uuid.New().String()); err != nil {
+			return errors.InternalServerError("go.micro.auth", "Unable to set a refresh token: %v", err)
+		}
 	}
 
 	// return the account
@@ -298,7 +306,7 @@ func (a *Auth) refreshTokenForAccount(ctx context.Context, id string) (string, e
 
 // get the account ID for the given refresh token
 func (a *Auth) accountIDForRefreshToken(ctx context.Context, token string) (string, error) {
-	prefix := strings.Join([]string{storePrefixRefreshTokens, namespace.FromContext(ctx)}, joinKey)
+	prefix := strings.Join([]string{storePrefixRefreshTokens, namespace.FromContext(ctx), ""}, joinKey)
 	keys, err := a.Options.Store.List(store.ListPrefix(prefix))
 	if err != nil {
 		return "", err
