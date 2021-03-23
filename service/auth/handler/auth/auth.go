@@ -281,8 +281,17 @@ func (a *Auth) Token(ctx context.Context, req *pb.TokenRequest, rsp *pb.TokenRes
 
 // set the refresh token for an account
 func (a *Auth) setRefreshToken(ctx context.Context, id, token string) error {
-	key := strings.Join([]string{storePrefixRefreshTokens, namespace.FromContext(ctx), id, token}, joinKey)
-	return a.Options.Store.Write(&store.Record{Key: key})
+	ns := namespace.FromContext(ctx)
+	key := strings.Join([]string{storePrefixRefreshTokens, ns, id, token}, joinKey)
+	err := a.Options.Store.Write(&store.Record{Key: key})
+	if err == nil {
+		// write a refresh token lookup index in best effort
+		a.Options.Store.Write(&store.Record{
+			Key:   strings.Join([]string{storePrefixRefreshTokens + "-", ns, token}, joinKey),
+			Value: []byte(id),
+		})
+	}
+	return err
 }
 
 // get the refresh token for an accutn
@@ -305,7 +314,19 @@ func (a *Auth) refreshTokenForAccount(ctx context.Context, id string) (string, e
 }
 
 // get the account ID for the given refresh token
-func (a *Auth) accountIDForRefreshToken(ctx context.Context, token string) (string, error) {
+func (a *Auth) accountIDForRefreshToken(ctx context.Context, token string) (id string, err error) {
+	key := strings.Join([]string{storePrefixRefreshTokens + "-", namespace.FromContext(ctx), token}, joinKey)
+	if recs, err := a.Options.Store.Read(key); err == nil {
+		return string(recs[0].Value), nil
+	}
+
+	defer func() {
+		if err != nil {
+			logger.Warnf("Inconsistent data! Took a slow path to get the account ID for the given refresh token %q: %v", token, err)
+		} else {
+			logger.Warnf("Inconsistent data! Took a slow path to get the account ID %q for the given refresh token %q", id, token)
+		}
+	}()
 	prefix := strings.Join([]string{storePrefixRefreshTokens, namespace.FromContext(ctx), ""}, joinKey)
 	keys, err := a.Options.Store.List(store.ListPrefix(prefix))
 	if err != nil {
