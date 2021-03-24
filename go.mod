@@ -27,12 +27,12 @@ require (
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.4.0
 	github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca
-	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
-	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2
-	golang.org/x/tools v0.0.0-20191216173652-a0e659d51361
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+	golang.org/x/net v0.0.0-20201021035429-f5854403a974
+	golang.org/x/tools v0.0.0-20201124115921-2c860bdd6e78
 	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
 	google.golang.org/grpc v1.26.0
 )
 
 // Use a production ready go-micro/v2 stable version maintained by nano-kit.
-replace github.com/micro/go-micro/v2 => github.com/nano-kit/go-micro/v2 v2.10.0
+replace github.com/micro/go-micro/v2 => ../go-micro
