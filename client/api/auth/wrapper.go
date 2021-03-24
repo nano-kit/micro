@@ -93,7 +93,7 @@ func (a authWrapper) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// construct the resource name, e.g. home => go.micro.web.home
 	resName := a.nsResolver.ResolveWithType(req)
 	if len(endpoint.Name) > 0 {
-		resName = resName + "." + endpoint.Name
+		resName = endpoint.Name
 	}
 
 	// determine the resource path. there is an inconsistency in how resolvers
