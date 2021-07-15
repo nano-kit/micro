@@ -8,7 +8,7 @@ require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/cloudflare/cloudflare-go v0.10.9
 	github.com/dustin/go-humanize v1.0.0
-	github.com/fsnotify/fsnotify v1.4.7
+	github.com/fsnotify/fsnotify v1.4.9
 	github.com/go-acme/lego/v3 v3.4.0
 	github.com/golang/protobuf v1.4.2
 	github.com/google/uuid v1.1.1
@@ -25,12 +25,12 @@ require (
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.4.0
 	github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca
-	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
-	golang.org/x/net v0.0.0-20201021035429-f5854403a974
-	golang.org/x/tools v0.0.0-20201124115921-2c860bdd6e78
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
+	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
+	golang.org/x/tools v0.1.1
 	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
 	google.golang.org/grpc v1.26.0
 )
 
 // Use a production ready go-micro/v2 stable version maintained by nano-kit.
-replace github.com/micro/go-micro/v2 => github.com/nano-kit/go-micro/v2 v2.10.1
+replace github.com/micro/go-micro/v2 => ../go-micro
