@@ -34,4 +34,4 @@ require (
 )
 
 // Use a production ready go-micro/v2 stable version maintained by nano-kit.
-replace github.com/micro/go-micro/v2 => ../go-micro
+replace github.com/micro/go-micro/v2 => github.com/nano-kit/go-micro/v2 v2.10.3-0.20210715124539-d6d82e2f566c

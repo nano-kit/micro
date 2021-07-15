@@ -403,6 +403,8 @@ github.com/nano-kit/go-micro/v2 v2.10.0 h1:enWwA+aOj+x+bgEgxSz0ItCgvHoZPkpC3k/Rs
 github.com/nano-kit/go-micro/v2 v2.10.0/go.mod h1:Ewf5iOvyLQub31dnG2mvo0lQ4Wuxx3ZzVdZLnn0hoGA=
 github.com/nano-kit/go-micro/v2 v2.10.1 h1:aPzSs68w3GnhTVyj941zItv9WcitxKU9LHFc88kfShY=
 github.com/nano-kit/go-micro/v2 v2.10.1/go.mod h1:jWRhAqRoapjkHIqWZuZ0oc8ccaRXP37Hgnmh1aSwdW8=
+github.com/nano-kit/go-micro/v2 v2.10.3-0.20210715124539-d6d82e2f566c h1:lnJiGP4coZXnNzywS864g9854I9dtypnJ/9spPeTC7s=
+github.com/nano-kit/go-micro/v2 v2.10.3-0.20210715124539-d6d82e2f566c/go.mod h1:Jq0PoBlQVibvn6Paz4dOipwUgMMY5mSZWBTRLH3gX4Q=
 github.com/nats-io/jwt v0.3.2 h1:+RB5hMpXUUA2dfxuhBTEkMOrYmM+gKIZYS1KjSostMI=
 github.com/nats-io/jwt v0.3.2/go.mod h1:/euKqTS1ZD+zzjYrY7pseZrTtWQSjujC7xjPc8wL6eU=
 github.com/nats-io/nats-server/v2 v2.1.6 h1:qAaHZaS8pRRNQLFaiBA1rq5WynyEGp9DFgmMfoaiXGY=
