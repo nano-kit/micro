@@ -36,3 +36,5 @@ dist
 # ignore IDE files
 micro.iml
 .idea/
+
+.DS_Store

@@ -5,7 +5,9 @@ go 1.15
 require (
 	github.com/aws/aws-sdk-go v1.23.0
 	github.com/boltdb/bolt v1.3.1
+	github.com/chzyer/logex v1.1.10 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
+	github.com/chzyer/test v0.0.0-20210722231415-061457976a23 // indirect
 	github.com/cloudflare/cloudflare-go v0.10.9
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fsnotify/fsnotify v1.4.9
@@ -14,7 +16,6 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.3
-	github.com/lucas-clemente/quic-go v0.21.1 // indirect
 	github.com/micro/cli/v2 v2.1.2
 	github.com/micro/go-micro/v2 v2.9.1
 	github.com/miekg/dns v1.1.27
@@ -24,7 +25,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/serenize/snaker v0.0.0-20171204205717-a683aaf2d516
 	github.com/spf13/viper v1.6.3
-	github.com/stretchr/testify v1.4.0
+	github.com/stretchr/testify v1.7.0
 	github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
@@ -34,4 +35,4 @@ require (
 )
 
 // Use a production ready go-micro/v2 stable version maintained by nano-kit.
-replace github.com/micro/go-micro/v2 => github.com/nano-kit/go-micro/v2 v2.10.3-0.20210715124539-d6d82e2f566c
+replace github.com/micro/go-micro/v2 => github.com/nano-kit/go-micro/v2 v2.10.3
